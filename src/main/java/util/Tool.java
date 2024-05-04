@@ -82,7 +82,7 @@ public class Tool implements DataAccessLayer {
         ResultSet resultSet = null;
         Statement statement = null;
         String meaning = null;
-        User.connection = createConnection(User.dictionaryUrl,User.username,User.password);
+        User.connection = DataAccessLayer.createConnection(User.dictionaryUrl,User.username,User.password);
 
         try {
             statement = User.connection.createStatement();
@@ -92,7 +92,6 @@ public class Tool implements DataAccessLayer {
             while (resultSet.next()){
                 int counter = 0;
                 synonims.add(resultSet.getLong("synset_id"));
-                System.out.println(synonims.get(counter));
                 counter ++;
             }
 
@@ -101,11 +100,10 @@ public class Tool implements DataAccessLayer {
                 resultSet = statement.executeQuery("SELECT gloss FROM wn_gloss WHERE synset_id = " + synonims.get(0));
                 while (resultSet.next()) {
                     meaning = resultSet.getString("gloss");
-                    System.out.println(meaning);
                 }
             }
             else{
-                System.out.println("Invalid word");
+                return null;
             }
         }
 
@@ -122,7 +120,7 @@ public class Tool implements DataAccessLayer {
                 throw new RuntimeException(e);
             }
         }
-        User.connection = createConnection(User.personalListUrl,User.username,User.password);
+        User.connection = DataAccessLayer.createConnection(User.personalListUrl,User.username,User.password);
         return meaning;
     }
 
